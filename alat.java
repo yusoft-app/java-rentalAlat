@@ -58,7 +58,6 @@ public class alat {
             System.out.println("|----|-----------------|-----|-------------------|");
             for(int i = 0; i < namaAlat.size(); i++){
                 System.out.printf("|%-4s|%-17s|%-5s| Rp.%14s |%n",i+1,namaAlat.get(i),qtyAlat.get(i),kurs.format(biayaAlat.get(i)));
-//                System.out.println(String.format("[%d] %s", i, namaAlat.get(i)));
             }
             System.out.println("|------------------------------------------------|");
         }
