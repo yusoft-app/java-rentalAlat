@@ -1,4 +1,5 @@
 package apprentalalatgunung;
+import java.text.*;
 import java.util.*;
 
 public class alat {
@@ -40,13 +41,26 @@ public class alat {
     }
     
     void list(){
+        //Membuat format Rp.
+        DecimalFormat kurs = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+        DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
+        formatRp.setCurrencySymbol("");
+        formatRp.setMonetaryDecimalSeparator(',');
+        formatRp.setGroupingSeparator('.');
+        kurs.setDecimalFormatSymbols(formatRp);
+
         if(namaAlat.isEmpty()){
             System.out.println("Belum ada alat terdata. Tambahkan terlebih dahulu beberapa alat!");
             tampilMenu = 1;
         }else{
+            System.out.println("+------------------------------------------------+");
+            System.out.println("| NO |    Nama Alat    | Qty | Biaya Sewa / hari |");
+            System.out.println("|----|-----------------|-----|-------------------|");
             for(int i = 0; i < namaAlat.size(); i++){
-                System.out.println(String.format("[%d] %s", i, namaAlat.get(i)));
+                System.out.printf("|%-4s|%-17s|%-5s| Rp.%14s |%n",i+1,namaAlat.get(i),qtyAlat.get(i),kurs.format(biayaAlat.get(i)));
+//                System.out.println(String.format("[%d] %s", i, namaAlat.get(i)));
             }
+            System.out.println("|------------------------------------------------|");
         }
         if(tampilMenu == 1){
             tampilMenu = 0;
@@ -77,9 +91,9 @@ public class alat {
         int qty = inputan.nextInt();
         System.out.print("Ubah Biaya : ");
         double biaya = inputan.nextDouble();
-        namaAlat.set(index, nama);
-        qtyAlat.set(index, qty);
-        biayaAlat.set(index, biaya);
+        namaAlat.set(index-1, nama);
+        qtyAlat.set(index-1, qty);
+        biayaAlat.set(index-1, biaya);
         menuAlat();
     }
     
@@ -87,9 +101,9 @@ public class alat {
         list();
         System.out.print("Pilih nomor alat yang akan dihapus : ");
         int index = inputan.nextInt();
-        namaAlat.remove(index);
-        qtyAlat.remove(index);
-        biayaAlat.remove(index);
+        namaAlat.remove(index-1);
+        qtyAlat.remove(index-1);
+        biayaAlat.remove(index-1);
         menuAlat();
     }
 }
