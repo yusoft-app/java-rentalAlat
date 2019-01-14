@@ -2,14 +2,16 @@ package apprentalalatgunung;
 import java.text.*;
 import java.util.*;
 
-public class alat {
-    private ArrayList namaAlat = new ArrayList();
-    private ArrayList qtyAlat = new ArrayList();
-    private ArrayList biayaAlat = new ArrayList();
+public class alat extends AppRentalAlatGunung{
+    public ArrayList<String> namaAlat = new ArrayList();
+    public ArrayList<Integer> qtyAlat = new ArrayList();
+    public ArrayList<Integer> qtyBooking = new ArrayList();
+    public ArrayList<Double> biayaAlat = new ArrayList();
+    private int qtySisa;
     private int err = 1;
     private int tampilMenu = 0;
-    Scanner inputan = new Scanner(System.in);
-    AppRentalAlatGunung awal = new AppRentalAlatGunung();
+//    Scanner inputan = new Scanner(System.in);
+//    AppRentalAlatGunung awal = new AppRentalAlatGunung();
     
     public void menuAlat(){
         System.out.println("#----------------#");
@@ -30,17 +32,17 @@ public class alat {
                 err = 1;
             }
             switch (menuAlat){
-                case 1: tampilMenu = 1; list(); break;
-                case 2: tambah(); break;
-                case 3: ubah(); break;
-                case 4: hapus(); break;
-                case 5: awal.menuUtama(); break;
+                case 1: tampilMenu = 1; peralatan.listAlat(); break;
+                case 2: peralatan.tambahAlat(); break;
+                case 3: peralatan.ubahAlat(); break;
+                case 4: peralatan.hapusAlat(); break;
+                case 5: menuUtama(); break;
                 default: System.out.println("Pilihan salah! Ulangi!");
             }
         }
     }
     
-    void list(){
+    public void listAlat(){
         //Membuat format Rp.
         DecimalFormat kurs = (DecimalFormat) DecimalFormat.getCurrencyInstance();
         DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
@@ -53,35 +55,37 @@ public class alat {
             System.out.println("Belum ada alat terdata. Tambahkan terlebih dahulu beberapa alat!");
             tampilMenu = 1;
         }else{
-            System.out.println("+------------------------------------------------+");
-            System.out.println("| NO |    Nama Alat    | Qty | Biaya Sewa / hari |");
-            System.out.println("|----|-----------------|-----|-------------------|");
-            for(int i = 0; i < namaAlat.size(); i++){
-                System.out.printf("|%-4s|%-17s|%-5s| Rp.%14s |%n",i+1,namaAlat.get(i),qtyAlat.get(i),kurs.format(biayaAlat.get(i)));
+            System.out.println("+---------------------------------------------------------------------------------+");
+            System.out.println("| NO |    Nama Alat    | Qty Alat | Qty Disewa | Qty Tersedia | Biaya Sewa / hari |");
+            System.out.println("|----|-----------------|----------|------------|--------------|-------------------|");
+            for(int i = 0; i < peralatan.namaAlat.size(); i++){
+                qtySisa = peralatan.qtyAlat.get(i) - peralatan.qtyBooking.get(i);
+                System.out.printf("|%-4s|%-17s|%-10s|%-12s|%-14s| Rp.%14s |%n",i+1,peralatan.namaAlat.get(i),peralatan.qtyAlat.get(i),peralatan.qtyBooking.get(i),qtySisa,kurs.format(peralatan.biayaAlat.get(i)));
             }
-            System.out.println("|------------------------------------------------|");
+            System.out.println("|---------------------------------------------------------------------------------|");
         }
         if(tampilMenu == 1){
             tampilMenu = 0;
-            menuAlat();
+            peralatan.menuAlat();
         }
     }
     
-    void tambah(){
+    public void tambahAlat(){
         System.out.print("Nama  : ");
         String nama = inputan.next();
         System.out.print("Qty   : ");
         int qty = inputan.nextInt();
         System.out.print("Biaya : ");
         double biaya = inputan.nextDouble();
-        namaAlat.add(nama);
-        qtyAlat.add(qty);
-        biayaAlat.add(biaya);
-        menuAlat();
+        peralatan.namaAlat.add(nama);
+        peralatan.qtyAlat.add(qty);
+        peralatan.biayaAlat.add(biaya);
+        peralatan.qtyBooking.add(0);
+        peralatan.menuAlat();
     }
     
-    void ubah(){
-        list();
+    public void ubahAlat(){
+        listAlat();
         System.out.print("Pilih nomor alat yang akan diubah : ");
         int index = inputan.nextInt();
         System.out.print("Ubah Nama  : ");
@@ -90,19 +94,24 @@ public class alat {
         int qty = inputan.nextInt();
         System.out.print("Ubah Biaya : ");
         double biaya = inputan.nextDouble();
-        namaAlat.set(index-1, nama);
-        qtyAlat.set(index-1, qty);
-        biayaAlat.set(index-1, biaya);
-        menuAlat();
+        peralatan.namaAlat.set(index-1, nama);
+        peralatan.qtyAlat.set(index-1, qty);
+        peralatan.biayaAlat.set(index-1, biaya);
+        peralatan.menuAlat();
     }
     
-    void hapus(){
-        list();
+    public void ubahQtyBooking(int nmrAlat, int qtyUbah){
+        peralatan.qtyBooking.set(nmrAlat-1, qtyUbah);
+    }
+    
+    public void hapusAlat(){
+        listAlat();
         System.out.print("Pilih nomor alat yang akan dihapus : ");
         int index = inputan.nextInt();
-        namaAlat.remove(index-1);
-        qtyAlat.remove(index-1);
-        biayaAlat.remove(index-1);
-        menuAlat();
+        peralatan.namaAlat.remove(index-1);
+        peralatan.qtyAlat.remove(index-1);
+        peralatan.biayaAlat.remove(index-1);
+        peralatan.qtyBooking.remove(index-1);
+        peralatan.menuAlat();
     }
 }
